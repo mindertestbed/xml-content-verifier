@@ -1,0 +1,2 @@
+# xml-content-verifier
+A general purpose xml-content-verfier that is capable of verifying XML files against         XSD schemas and schematrons.         An XSD schema can be in an archive that is in memory, (with all its references), a remote URL         or a Remote archive. xml-content-verifier is capable of reading all XSD schemas with their references         from JAR, ZIP, LZMA, LZMA2 and TARGZ archives.

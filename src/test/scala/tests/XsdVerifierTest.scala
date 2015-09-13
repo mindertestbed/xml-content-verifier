@@ -1,6 +1,8 @@
 package tests
 
 import java.nio.file.FileSystems
+import java.security.cert.X509Certificate
+import javax.net.ssl._
 
 import org.beybunproject.xmlContentVerifier.utils.Utils
 import org.beybunproject.xmlContentVerifier.{ArchiveType, XmlContentVerifier}
@@ -8,7 +10,10 @@ import org.specs2.mutable._
 
 /**
   */
-class XsdVerifierTest  extends Specification{
+class XsdVerifierTest extends Specification {
+
+  prepareHttps()
+
   sequential
 
   "paths" should {
@@ -112,5 +117,41 @@ class XsdVerifierTest  extends Specification{
       */
     }
 
+  }
+
+
+  def prepareHttps(): Unit = {
+    try {
+      /*
+   *  fix for
+   *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
+   *       sun.security.validator.ValidatorException:
+   *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+   *               unable to find valid certification path to requested target
+   */
+      val trustAllCerts = Array[TrustManager] {
+        new X509TrustManager() {
+          override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String) {}
+          override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String) {}
+          override def getAcceptedIssuers() = null
+        }
+      };
+
+      val sc = SSLContext.getInstance("SSL");
+      sc.init(null, trustAllCerts, new java.security.SecureRandom());
+      HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+      // Create all-trusting host name verifier
+      val allHostsValid = new HostnameVerifier() {
+        override def verify(hostname: String, session: SSLSession) = true
+      };
+      // Install the all-trusting host verifier
+      HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+      /*
+       * end of the fix
+       */
+    } catch {
+      case _ => {}
+    }
   }
 }

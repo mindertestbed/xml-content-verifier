@@ -2,7 +2,6 @@ package org.beybunproject.xmlContentVerifier;
 
 import iso_schematron_xslt2.SchematronClassResolver;
 
-import javax.net.ssl.*;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -17,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
-import java.security.cert.CertificateException;
 import java.util.Properties;
 
 /**
@@ -35,55 +33,6 @@ public class XmlContentVerifier {
 
   static {
     tFactory.setURIResolver(resolver);
-  }
-
-  static {
-
-    try {
-    /*
- *  fix for
- *    Exception in thread "main" javax.net.ssl.SSLHandshakeException:
- *       sun.security.validator.ValidatorException:
- *           PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
- *               unable to find valid certification path to requested target
- */
-      TrustManager[] trustAllCerts = new TrustManager[]{
-          new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-            }
-
-            @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-            }
-
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-              return null;
-            }
-          }
-      };
-
-      SSLContext sc = SSLContext.getInstance("SSL");
-      sc.init(null, trustAllCerts, new java.security.SecureRandom());
-      HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-// Create all-trusting host name verifier
-      HostnameVerifier allHostsValid = new HostnameVerifier() {
-        public boolean verify(String hostname, SSLSession session) {
-          return true;
-        }
-      };
-// Install the all-trusting host verifier
-      HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-/*
- * end of the fix
- */
-    } catch (Exception ex) {
-    }
-
   }
 
   /**

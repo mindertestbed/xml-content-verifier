@@ -1,6 +1,7 @@
 package org.beybunproject.xmlContentVerifier;
 
 import org.beybunproject.xmlContentVerifier.iso_schematron_xslt2.SchematronClassResolver;
+import org.beybunproject.xmlContentVerifier.utils.ExceptionUtils;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.*;
@@ -177,7 +178,27 @@ public class XmlContentVerifier {
   }
 
   /**
-   * Performs schematron verification with the given schematrno file on the provided xml
+   * Performs schematron verification with the given schematron file on the provided xml
+   *
+   * @param schematron
+   * @param xml
+   */
+  public static void verifySchematron(Schema schematron, byte[] xml) {
+    verifySchematron(schematron, new ByteArrayInputStream(xml), null);
+  }
+
+  /**
+   * Performs schematron verification with the given schematron file on the provided xml
+   *
+   * @param schematron
+   * @param xml
+   */
+  public static void verifySchematron(Schema schematron, byte[] xml, Properties properties) {
+    verifySchematron(schematron, new ByteArrayInputStream(xml), properties);
+  }
+
+  /**
+   * Performs schematron verification with the given schematron file on the provided xml
    *
    * @param schematron
    * @param xml

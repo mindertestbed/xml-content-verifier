@@ -19,8 +19,8 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * @author: yerlibilgin
- * @date: 12/09/15.
+ * Author: yerlibilgin
+ * Date: 12/09/15.
  */
 public class XmlContentVerifier {
 
@@ -40,13 +40,51 @@ public class XmlContentVerifier {
    *
    * @param xsd the schema definition that will be used for verification
    * @param xml the xml that will be verified
-   * @return the result of the verification process
    */
   public static void verifyXsd(Xsd xsd, byte[] xml) {
-    verifyXsdStream(xsd, new ByteArrayInputStream(xml));
+    verifyXsd(xsd, new ByteArrayInputStream(xml));
   }
 
-  public static void verifyXsdStream(Xsd xsd, InputStream inputStream) {
+  /**
+   * Assuming plain XSD and XML bytes, this method delegates the
+   * verifyXsd function with ByteArrayInputStreams and performs verification
+   * directly on the resources.
+   *
+   * Any external xsd reference will fail.
+   *
+   * @param xsd
+   * @param xml
+   */
+  public static void verifyXsd(byte[] xsd, byte[] xml) {
+    verifyXsd(new ByteArrayInputStream(xsd), new ByteArrayInputStream(xml));
+  }
+
+  /**
+   * Assuming plain XSD and XML, this method performs direct verification on the XML.
+   *
+   * @param xsd as input stream
+   * @param xml as input stream
+   */
+  public static void verifyXsd(InputStream xsd, InputStream xml) {
+    Schema schema = null;
+    try {
+      SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+      schema = schemaFactory.newSchema(new StreamSource(xsd));
+    } catch (Exception ex) {
+      throw new RuntimeException("Unable to parse schema", ex);
+    }
+
+    try {
+      Source xmlFile = new StreamSource(xml);
+      Validator validator = schema.newValidator();
+      validator.validate(xmlFile);
+
+    } catch (Exception ex) {
+      throw new RuntimeException("XML Verification failed", ex);
+    }
+  }
+
+  public static void verifyXsd(Xsd xsd, InputStream inputStream) {
     Schema schema = null;
     try {
       SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -89,12 +127,33 @@ public class XmlContentVerifier {
     ByteArrayInputStream bSchematron = new ByteArrayInputStream(sch);
     ByteArrayInputStream bXml = new ByteArrayInputStream(xml);
     ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-    verifySchematronStream(bSchematron, bXml, bOut, properties);
+    verifySchematron(bSchematron, bXml, bOut, properties);
     byte[] result = bOut.toByteArray();
     String str = new String(result);
     if (str.contains("failed")) {
       throw new RuntimeException("Schematron verification failed");
     }
+  }
+
+  /**
+   * Performs schematron verification with the given schematrno file on the provided xml
+   *
+   * @param schematron
+   * @param xml
+   * @param result
+   */
+  public static void verifySchematron(InputStream schematron, InputStream xml, OutputStream result, Properties properties) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_dsdl_include.xsl"), schematron, baos, properties);
+    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+    baos.reset();
+    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_abstract_expand.xsl"), bais, baos, properties);
+    bais = new ByteArrayInputStream(baos.toByteArray());
+    baos.reset();
+    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_svrl_for_xslt2.xsl"), bais, baos, properties);
+    bais = new ByteArrayInputStream(baos.toByteArray());
+    baos.reset();
+    simpleTransformStream(bais, xml, result, properties);
   }
 
   /**
@@ -122,7 +181,6 @@ public class XmlContentVerifier {
    *
    * @param xsl - The byte array that includes the xsl
    * @param xml - The byte array that includes the xml
-   * @return result as byte []
    */
   public static void simpleTransform(byte[] xsl, byte[] xml, Properties properties) {
     ByteArrayInputStream bXsl = new ByteArrayInputStream(xsl);
@@ -131,28 +189,6 @@ public class XmlContentVerifier {
     simpleTransformStream(bXsl, bXml, baos, properties);
     baos.toByteArray();
   }
-
-  /**
-   * Performs schematron verification with the given schematrno file on the provided xml
-   *
-   * @param schematron
-   * @param xml
-   * @param result
-   */
-  public static void verifySchematronStream(InputStream schematron, InputStream xml, OutputStream result, Properties properties) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_dsdl_include.xsl"), schematron, baos, properties);
-    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-    baos.reset();
-    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_abstract_expand.xsl"), bais, baos, properties);
-    bais = new ByteArrayInputStream(baos.toByteArray());
-    baos.reset();
-    simpleTransformStream(resolver.rstrm("iso_schematron_xslt2/iso_svrl_for_xslt2.xsl"), bais, baos, properties);
-    bais = new ByteArrayInputStream(baos.toByteArray());
-    baos.reset();
-    simpleTransformStream(bais, xml, result, properties);
-  }
-
 
   public static Xsd xsdFromByteArray(byte[] bytes) {
     return xsdFromByteArray(null, bytes, ArchiveType.PLAIN);

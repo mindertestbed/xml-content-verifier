@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 /**
- * @author: yerlibilgin
- * @date: 12/09/15.
+ * Author: yerlibilgin
+ * Date: 12/09/15.
  */
 public class Utils {
   public static byte[] readStream(InputStream inputStream) {

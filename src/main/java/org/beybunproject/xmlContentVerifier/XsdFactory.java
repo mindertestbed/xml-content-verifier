@@ -5,8 +5,8 @@ import org.beybunproject.xmlContentVerifier.utils.Utils;
 import java.net.URL;
 
 /**
- * @author: yerlibilgin
- * @date: 11/09/15.
+ * Author: yerlibilgin
+ * Date: 11/09/15.
  */
 public class XsdFactory {
   public static Xsd xsdFromByteArray(String name, byte[] source, ArchiveType type) {

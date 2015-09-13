@@ -7,8 +7,8 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
 /**
- * @author: yerlibilgin
- * @date: 09/09/15.
+ * Author: yerlibilgin
+ * Date: 09/09/15.
  */
 public class JarXsdDecoder extends ArchiveXsdDecoder {
 

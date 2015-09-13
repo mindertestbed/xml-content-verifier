@@ -3,8 +3,8 @@ package org.beybunproject.xmlContentVerifier;
 import java.io.InputStream;
 
 /**
- * @author: yerlibilgin
- * @date: 09/09/15.
+ * Author: yerlibilgin
+ * Date: 09/09/15.
  */
 public interface XsdDecoder {
   public static final String MINDER_DUMMY_PROTOCOL = "minbase://";

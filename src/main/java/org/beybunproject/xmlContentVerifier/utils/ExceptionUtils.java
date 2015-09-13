@@ -3,8 +3,8 @@ package org.beybunproject.xmlContentVerifier.utils;
 import java.io.IOException;
 
 /**
- * @author: yerlibilgin
- * @date: 11/09/15.
+ * Author: yerlibilgin
+ * Date: 11/09/15.
  */
 public class ExceptionUtils {
   public static void throwAsRuntimeException(Exception ex) {

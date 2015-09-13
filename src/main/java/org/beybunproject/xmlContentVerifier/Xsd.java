@@ -4,14 +4,11 @@ import com.sun.org.apache.xerces.internal.dom.DOMInputImpl;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
-import javax.net.ssl.*;
-import javax.security.cert.X509Certificate;
 import java.io.InputStream;
-import java.security.cert.CertificateException;
 
 /**
- * @author: yerlibilgin
- * @date: 08/09/15.
+ * Aauthor: yerlibilgin
+ * Date: 08/09/15.
  */
 public class Xsd implements LSResourceResolver {
   private XsdResourceResolver resolver;

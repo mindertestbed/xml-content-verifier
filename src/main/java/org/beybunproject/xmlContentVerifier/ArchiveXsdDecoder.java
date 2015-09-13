@@ -6,8 +6,8 @@ import java.nio.file.FileSystems;
 import java.util.HashMap;
 
 /**
- * @author: yerlibilgin
- * @date: 12/09/15.
+ * Author: yerlibilgin
+ * Date: 12/09/15.
  */
 public abstract class ArchiveXsdDecoder extends HashMap<String, byte[]> implements XsdDecoder {
   @Override

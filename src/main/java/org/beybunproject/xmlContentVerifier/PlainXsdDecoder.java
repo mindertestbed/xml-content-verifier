@@ -6,8 +6,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
- * @author: yerlibilgin
- * @date: 11/09/15.
+ * Author: yerlibilgin
+ * Date: 11/09/15.
  */
 public class PlainXsdDecoder implements XsdDecoder {
   private byte[] buffer;

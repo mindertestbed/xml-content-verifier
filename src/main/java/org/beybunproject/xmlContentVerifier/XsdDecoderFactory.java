@@ -4,8 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 /**
- * @author: yerlibilgin
- * @date: 09/09/15.
+ * Author: yerlibilgin
+ * Date: 09/09/15.
  */
 public class XsdDecoderFactory {
   public static XsdDecoder createDecoderFor(InputStream inputStream, ArchiveType archiveType) {

@@ -3,8 +3,8 @@ package org.beybunproject.xmlContentVerifier;
 import java.io.InputStream;
 
 /**
- * @author: yerlibilgin
- * @date: 11/09/15.
+ * Author: yerlibilgin
+ * Date: 11/09/15.
  */
 public class XsdResourceResolver {
   private final XsdDecoder decoder;

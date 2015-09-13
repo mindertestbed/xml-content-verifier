@@ -6,7 +6,7 @@ import java.io.InputStream;
  * Author: yerlibilgin
  * Date: 09/09/15.
  */
-public interface XsdDecoder {
+public interface SchemaDecoder {
   public static final String MINDER_DUMMY_PROTOCOL = "minbase://";
 
   /**

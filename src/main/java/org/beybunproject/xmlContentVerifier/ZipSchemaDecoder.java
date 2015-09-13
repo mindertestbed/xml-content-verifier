@@ -10,7 +10,7 @@ import java.util.zip.ZipInputStream;
  * Author: yerlibilgin
  * Date: 09/09/15.
  */
-public class ZipXsdDecoder extends ArchiveXsdDecoder {
+public class ZipSchemaDecoder extends ArchiveSchemaDecoder {
   private ZipInputStream zipInputStream;
 
   @Override

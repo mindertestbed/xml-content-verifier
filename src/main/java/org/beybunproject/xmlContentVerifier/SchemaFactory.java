@@ -8,11 +8,11 @@ import java.net.URL;
  * Author: yerlibilgin
  * Date: 11/09/15.
  */
-public class XsdFactory {
-  public static Xsd xsdFromByteArray(String name, byte[] source, ArchiveType type) {
-    XsdResourceResolver archiveResourceResolver = new XsdResourceResolver(source, type);
-    Xsd xsd = new Xsd(archiveResourceResolver, XsdDecoder.MINDER_DUMMY_PROTOCOL + name);
-    return xsd;
+public class SchemaFactory {
+  public static Schema schemaFromByteArray(String name, byte[] source, ArchiveType type) {
+    SchemaResourceResolver archiveResourceResolver = new SchemaResourceResolver(source, type);
+    Schema schema = new Schema(archiveResourceResolver, SchemaDecoder.MINDER_DUMMY_PROTOCOL + name);
+    return schema;
   }
 
   /**
@@ -22,7 +22,7 @@ public class XsdFactory {
    * @param archiveType
    * @return
    */
-  public static Xsd xsdFromURL(String name, String url, ArchiveType archiveType) {
+  public static Schema schemaFromUrl(String name, String url, ArchiveType archiveType) {
     try {
       if(archiveType == ArchiveType.PLAIN){
         //we need to make sure that if the xsd references others, we provide them
@@ -31,8 +31,8 @@ public class XsdFactory {
       }else {
         final URL urlO = new URL(url);
         byte[] bytes = Utils.readStream(urlO.openStream());
-        XsdResourceResolver xsdResourceResolver = new XsdResourceResolver(bytes, archiveType);
-        return new Xsd(xsdResourceResolver, XsdDecoder.MINDER_DUMMY_PROTOCOL + name);
+        SchemaResourceResolver schemaResourceResolver = new SchemaResourceResolver(bytes, archiveType);
+        return new Schema(schemaResourceResolver, SchemaDecoder.MINDER_DUMMY_PROTOCOL + name);
       }
     } catch (Exception ex) {
       throw ExceptionUtils.asRuntimeException(ex);

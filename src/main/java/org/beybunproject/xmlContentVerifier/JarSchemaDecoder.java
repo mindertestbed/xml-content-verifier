@@ -10,7 +10,7 @@ import java.util.zip.ZipEntry;
  * Author: yerlibilgin
  * Date: 09/09/15.
  */
-public class JarXsdDecoder extends ArchiveXsdDecoder {
+public class JarSchemaDecoder extends ArchiveSchemaDecoder {
 
   JarInputStream jarInputStream;
 

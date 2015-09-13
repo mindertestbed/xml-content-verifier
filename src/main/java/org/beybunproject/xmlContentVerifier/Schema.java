@@ -4,17 +4,22 @@ import com.sun.org.apache.xerces.internal.dom.DOMInputImpl;
 import org.w3c.dom.ls.LSInput;
 import org.w3c.dom.ls.LSResourceResolver;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamSource;
 import java.io.InputStream;
+import java.nio.file.FileSystems;
 
 /**
  * Aauthor: yerlibilgin
  * Date: 08/09/15.
  */
-public class Xsd implements LSResourceResolver {
-  private XsdResourceResolver resolver;
+public class Schema implements LSResourceResolver, URIResolver {
+  private SchemaResourceResolver resolver;
   private String systemId;
 
-  public Xsd(XsdResourceResolver resolver, String systemId) {
+  public Schema(SchemaResourceResolver resolver, String systemId) {
     this.resolver = resolver;
     this.systemId = systemId;
   }
@@ -35,6 +40,19 @@ public class Xsd implements LSResourceResolver {
   public String getSystemId() {
     return systemId;
   }
+
+  @Override
+  public Source resolve(String href, String base) throws TransformerException {
+    String baseURI;
+    String actualPath;
+    if (base == null || base.isEmpty())
+      baseURI = FileSystems.getDefault().getPath(href).normalize().toString();
+    else {
+      baseURI = base.substring(0, base.lastIndexOf('/'));
+      baseURI = FileSystems.getDefault().getPath(baseURI + "/" + href).normalize().toString();
+    }
+    return new StreamSource(resolver.getStreamForResource(null, null, null, href, base), baseURI);
+  }
 }
 
 
@@ -43,14 +61,14 @@ public class Xsd implements LSResourceResolver {
  * Resolve an XSD schema and its dependencies from an asset plain xsd
  * example:
  * <p>
- * val xsd = xsdFromByteArray(getAsset("asset name"))
+ * val xsd = schemaFromByteArray(getAsset("asset name"))
  * xml-content-verifier.verifySchema(xsd, xml)
  * <p>
  * Requirement 2:
  * Resolve an XSD schema and its dependencies from an asset archive
  * example:
  * <p>
- * val xsd = xsdFromByteArray(getAsset("asset name"), ArchiveType..ZIP|GZIP|PLAIN|RAR?|7z?)
+ * val xsd = schemaFromByteArray(getAsset("asset name"), ArchiveType..ZIP|GZIP|PLAIN|RAR?|7z?)
  * xml-content-verifier.verifySchema(xsd, xml)
  * <p>
  * Requirement 3:

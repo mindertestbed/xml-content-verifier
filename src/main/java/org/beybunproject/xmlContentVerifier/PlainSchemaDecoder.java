@@ -9,7 +9,7 @@ import java.io.InputStream;
  * Author: yerlibilgin
  * Date: 11/09/15.
  */
-public class PlainXsdDecoder implements XsdDecoder {
+public class PlainSchemaDecoder implements SchemaDecoder {
   private byte[] buffer;
 
   @Override

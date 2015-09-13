@@ -7,12 +7,12 @@ import java.io.InputStream;
  * Author: yerlibilgin
  * Date: 09/09/15.
  */
-public class XsdDecoderFactory {
-  public static XsdDecoder createDecoderFor(InputStream inputStream, ArchiveType archiveType) {
-    XsdDecoder target = null;
+public class SchemaDecoderFactory {
+  public static SchemaDecoder createDecoderFor(InputStream inputStream, ArchiveType archiveType) {
+    SchemaDecoder target = null;
     switch (archiveType) {
       case PLAIN:
-        target = new PlainXsdDecoder();
+        target = new PlainSchemaDecoder();
         break;
       case RAR:
       case LZMA:
@@ -20,11 +20,11 @@ public class XsdDecoderFactory {
         throw new UnsupportedOperationException("Archive Type " + archiveType + " is not supported yet");
 
       case ZIP:
-        target = new ZipXsdDecoder();
+        target = new ZipSchemaDecoder();
         break;
 
       case JAR:
-        target = new JarXsdDecoder();
+        target = new JarSchemaDecoder();
         break;
 
       case TARGZ:
@@ -36,7 +36,7 @@ public class XsdDecoderFactory {
     return target;
   }
 
-  public static XsdDecoder createDecoderFor(byte[] archiveBytes, ArchiveType archiveType) {
+  public static SchemaDecoder createDecoderFor(byte[] archiveBytes, ArchiveType archiveType) {
     return createDecoderFor(new ByteArrayInputStream(archiveBytes), archiveType);
   }
 }

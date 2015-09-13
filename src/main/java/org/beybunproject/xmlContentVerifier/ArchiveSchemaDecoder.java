@@ -9,15 +9,16 @@ import java.util.HashMap;
  * Author: yerlibilgin
  * Date: 12/09/15.
  */
-public abstract class ArchiveXsdDecoder extends HashMap<String, byte[]> implements XsdDecoder {
+public abstract class ArchiveSchemaDecoder extends HashMap<String, byte[]> implements SchemaDecoder {
   @Override
   public InputStream getStreamForResource(String type, String namespaceURI, String publicId, String systemId, String baseURI) {
+    /*
     System.out.println("Resolve");
     System.out.println("TYPE: " + type);
     System.out.println("NamespaceURI: " + namespaceURI);
     System.out.println("SYSTEMID: " + systemId);
     System.out.println("BASEURI: " + baseURI);
-
+*/
     String actualPath;
     if (baseURI == null)
       actualPath = normalizePath(systemId);
@@ -25,10 +26,10 @@ public abstract class ArchiveXsdDecoder extends HashMap<String, byte[]> implemen
       baseURI = baseURI.substring(0, baseURI.lastIndexOf('/'));
       actualPath = normalizePath(baseURI + "/" + systemId);
     }
-
+/*
     System.out.println("ACTUAL PATH: " + actualPath);
     System.out.println("--------------");
-
+*/
     if (this.containsKey(actualPath)) {
       return new ByteArrayInputStream(get(actualPath));
     }

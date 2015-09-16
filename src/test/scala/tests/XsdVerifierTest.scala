@@ -18,6 +18,24 @@ class XsdVerifierTest extends Specification {
 
   sequential
 
+  "path normalization" should {
+    "normalize reduntant .." in {
+      Utils.normalizePath("/a/b/../c/d") mustEqual("/a/c/d")
+    }
+
+    "normalize reduntant ." in {
+      Utils.normalizePath("/a/b/./c/d") mustEqual("/a/b/c/d")
+    }
+
+    "normalize reduntant ///" in {
+      Utils.normalizePath("/a///b/./c/..//d") mustEqual("/a/b/d")
+    }
+
+    "normalize reduntant a complex one" in {
+      Utils.normalizePath("htc:///////a/.//b/./c/..//d//lk") mustEqual("htc:/a/b/d/lk")
+    }
+  }
+
   "XSD Schema resolution" should {
     "be successfull on plain xsds streams" in {
       {

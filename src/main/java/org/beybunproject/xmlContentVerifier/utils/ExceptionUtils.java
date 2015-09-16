@@ -1,7 +1,5 @@
 package org.beybunproject.xmlContentVerifier.utils;
 
-import java.io.IOException;
-
 /**
  * Author: yerlibilgin
  * Date: 11/09/15.

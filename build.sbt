@@ -2,7 +2,7 @@ organization := "org.beybunproject"
 
 name := "xml-content-verifier"
 
-version := "0.1"
+version := "0.2"
 
 resolvers += Resolver.mavenLocal
 
